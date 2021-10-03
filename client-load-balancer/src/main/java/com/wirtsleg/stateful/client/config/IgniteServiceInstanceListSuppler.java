@@ -11,7 +11,6 @@ import org.apache.ignite.events.DiscoveryEvent;
 import org.apache.ignite.internal.IgniteEx;
 import org.apache.ignite.internal.managers.discovery.DiscoCache;
 import org.apache.ignite.internal.processors.cache.GatewayProtectedCacheProxy;
-import org.apache.ignite.internal.processors.cache.GridCacheProcessor;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.Request;
@@ -33,14 +32,12 @@ public class IgniteServiceInstanceListSuppler implements ServiceInstanceListSupp
     };
 
     private final IgniteEx ignite;
-    private final GridCacheProcessor cacheProcessor;
     private final Map<String/*Cache name*/, Affinity<Object>> affinities = new ConcurrentHashMap<>();
 
     private volatile List<ServiceInstance> instances;
 
     public IgniteServiceInstanceListSuppler(IgniteEx ignite) {
         this.ignite = ignite;
-        this.cacheProcessor = ignite.context().cache();
 
         ignite.context().event().addDiscoveryEventListener(this::topologyChanged, EVTS_DISCOVERY);
         updateInstances(ignite.cluster().nodes());
