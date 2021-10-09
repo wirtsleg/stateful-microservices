@@ -45,6 +45,8 @@ public class IgniteServiceInstanceListSuppler implements ServiceInstanceListSupp
 
     private void topologyChanged(DiscoveryEvent event, DiscoCache cache) {
         updateInstances(event.topologyNodes());
+
+        affinities.clear();
     }
 
     private void updateInstances(Collection<ClusterNode> nodes) {
